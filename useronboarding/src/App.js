@@ -5,6 +5,7 @@ import FormikUser from './component/Form'
 function App() {
   return (
     <div className="App">
+     <h1>Registration</h1>
       <FormikUser />
     </div>
   );

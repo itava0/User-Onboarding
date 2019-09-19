@@ -9,16 +9,15 @@ const UserForm = ({ values, errors, touched, status }) => {
     if (status) {
       setUser([...users, status]);
     }
-  }, [users, status]);
+  }, [status]);
 
   return (
-    <div className="animal-form">
+    <div className="testbox">
       <Form>
         <Field type="text" name="username" placeholder="Name" />
         {touched.username && errors.username && (
           <p className="error">{errors.username}</p>
         )}
-
         <Field type="text" name="email" placeholder="Email" />
         {touched.email && errors.email && (
           <p className="error">{errors.email}</p>
@@ -27,15 +26,29 @@ const UserForm = ({ values, errors, touched, status }) => {
           type="password"
           className="food-select"
           name="password"
+          autoComplete="cc-number"
           placeholder="password"
         />
         {touched.password && errors.password && <p>{errors.password}</p>}
-        <label>
+        <label className="container">
           Terms of Service
-          <Field type="checkbox" name="term" checked={values.term} />
+          <Field
+            type="checkbox"
+            name="term"
+            checked="checked"
+            checked={values.term}
+          />
+          <span className="checkmark"></span>
         </label>
         <button>Submit!</button>
       </Form>
+      {users.map(item => (
+        <ul key={item.id}>
+          <li>User:{item.username}</li>
+          <li>Email:{item.email}</li>
+          <li>Password:{item.password}</li>
+        </ul>
+      ))}
     </div>
   );
 };
@@ -58,12 +71,11 @@ const FormikUser = withFormik({
       .min(6, "Password must be 6 characters or longer")
       .required("Password is required")
   }),
-  //You can use this to see the values
   handleSubmit(values, { setStatus }) {
+    console.log(values);
     axios
       .post("https://reqres.in/api/users/", values)
       .then(res => {
-        console.log(res);
         setStatus(res.data);
       })
       .catch(err => console.log(err.res));
