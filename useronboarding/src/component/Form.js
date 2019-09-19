@@ -3,7 +3,14 @@ import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
-const UserForm = ({ values, errors, touched, status }) => {
+const UserForm = ({
+  values,
+  errors,
+  touched,
+  status,
+  handleReset,
+  handleSubmit
+}) => {
   const [users, setUser] = useState([]);
   useEffect(() => {
     if (status) {
@@ -12,8 +19,8 @@ const UserForm = ({ values, errors, touched, status }) => {
   }, [status]);
 
   return (
-    <div className="testbox">
-      <Form>
+    <div>
+      <Form onSubmit={handleSubmit}>
         <Field type="text" name="username" placeholder="Name" />
         {touched.username && errors.username && (
           <p className="error">{errors.username}</p>
@@ -32,15 +39,15 @@ const UserForm = ({ values, errors, touched, status }) => {
         {touched.password && errors.password && <p>{errors.password}</p>}
         <label className="container">
           Terms of Service
-          <Field
-            type="checkbox"
-            name="term"
-            checked="checked"
-            checked={values.term}
-          />
+          <Field type="checkbox" name="term" checked={values.term} />
           <span className="checkmark"></span>
         </label>
-        <button>Submit!</button>
+        <div className="container">
+          <button type="submit">Submit!</button>
+          <button className="reset" onClick={handleReset} type="button">
+            Reset
+          </button>
+        </div>
       </Form>
       {users.map(item => (
         <ul key={item.id}>
